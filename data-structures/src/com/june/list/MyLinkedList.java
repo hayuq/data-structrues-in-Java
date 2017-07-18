@@ -1,4 +1,4 @@
-package com.june.linearlist;
+package com.june.list;
 
 import java.util.AbstractSequentialList;
 import java.util.Deque;

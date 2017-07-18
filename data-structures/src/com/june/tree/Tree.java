@@ -2,7 +2,7 @@ package com.june.tree;
 
 public interface Tree<E> {
 	
-	int deepth();
+	int depth();
 	
 	int size();
 	

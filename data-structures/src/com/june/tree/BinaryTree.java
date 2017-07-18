@@ -4,19 +4,20 @@ public class BinaryTree<E> implements Tree<E> {
 	
 	private TreeNode<E> root; //根节点
 	
-	private TreeNode<E>[] data; //存放树节点的数组
+	private Object[] data; //存放树节点的数组
 	
 	private int size; //树的大小
 	
-	private int deepth; //树的深度
+	private int depth; //树的深度
 	
 	public BinaryTree() {
 		root = new TreeNode<>();
+		data = new Object[size];
 	}
 	
 	@Override
-	public int deepth() {
-		return deepth;
+	public int depth() {
+		return depth;
 	}
 	
 	@Override
