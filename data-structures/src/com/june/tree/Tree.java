@@ -6,21 +6,9 @@ public interface Tree<E> {
 	
 	int size();
 	
-	E root();
+	boolean isEmpty();
 	
-	void add(E e);
-	
-	E get(int index);
-	
-	E set(int index, E e);
-	
-	void add(int index, E e);
-	
-	int search(Object o);
-	
-	E remove(int index);
-	
-	boolean remove(Object o);
+	void clear();
 	
 	/**
 	 * 前序遍历
@@ -37,4 +25,9 @@ public interface Tree<E> {
 	 */
 	void postOrder();
 
+	/**
+	 * 层序遍历
+	 */
+	void levelOrder();
+	
 }

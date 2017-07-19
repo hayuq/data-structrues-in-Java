@@ -57,6 +57,10 @@ public class MyLinkedList<E> extends AbstractSequentialList<E> implements Deque<
 		E item;
 		Node<E> prev, next;
 		
+		Node(E item) {
+			this(null, item, null);
+		}
+		
 		Node(Node<E> prev, E item, Node<E> next) {
 			this.item = item;
 			this.prev = prev;
