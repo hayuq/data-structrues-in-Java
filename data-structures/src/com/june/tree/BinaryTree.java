@@ -6,9 +6,9 @@ import java.util.Queue;
 
 public abstract class BinaryTree<E> implements Tree<E> {
 	
-	protected Node<E> root; //根节点
+	protected transient Node<E> root; //根节点
 	
-	protected int size; //树的节点数
+	protected transient int size; //树的节点数
 	
 	protected Comparator<? super E> comparator;
 	
@@ -26,12 +26,12 @@ public abstract class BinaryTree<E> implements Tree<E> {
 		return root;
 	}
 	
-	public int depth(Node<E> root) {
-		if (root == null) 
+	public int depth(Node<E> p) {
+		if (p == null) 
 			return 0;
 		//递归分别计算左右子树的深度
-		int leftDepth = depth(root.left);
-		int rightDepth = depth(root.right);
+		int leftDepth = depth(p.left);
+		int rightDepth = depth(p.right);
 		return Math.max(leftDepth, rightDepth) + 1;
 	}
 	
@@ -67,16 +67,42 @@ public abstract class BinaryTree<E> implements Tree<E> {
 	
 	@Override
 	public void clear() {
-		clear(root);
+		delete(root);
 	}
 	
-	public void clear(Node<E> root) {
-		if (root != null) {
-			clear(root.left);
-			clear(root.right);
-			root = null;
-			size = 0;
+	//TODO 清除是这样？？？
+	public void delete(Node<E> p) {
+		if (p != null) {
+			delete(p.left);
+			delete(p.right);
+			p = null;
+			size--;
 		}
+		
+		/** 
+         * 1. 若p没有左子树，直接用p的右孩子取代它；
+         * 2. 若p有左子树，找到其左子树的最右边的叶子结点r，用该叶子结点r来替代p，把r的左孩子作为r的父亲的右孩子；
+         */
+//		if (p == null)
+//			return;
+//        if(p.left == null) {
+//        	p = p.right;
+//        } else {
+//            Node<E> r = p.left;
+//            Node<E> prev = p.right;
+//            while(r.right != null) {
+//            	prev = r;
+//            	r = r.right;
+//            }
+//            p.item = r.item;
+//            // 若r不是p的左子树,p的左子树不变，r的左子树作为r的父结点的右孩子结点
+//            if(prev != r) {
+//            	prev.right = r.left;
+//            } else {
+//            	// 若r是p的左子树，则p的左子树指向r的左子树
+//            	p.left = r.left;
+//            }
+//        }
 	}
 	
 	@Override
@@ -86,13 +112,13 @@ public abstract class BinaryTree<E> implements Tree<E> {
 
 	/**
 	 * 先序遍历：根 -> 左 -> 右
-	 * @param root
+	 * @param p
 	 */
-	public void preOrder(Node<E> root) {
-		if (root != null) {
-			visit(root);
-			preOrder(root.left);
-			preOrder(root.right);
+	public void preOrder(Node<E> p) {
+		if (p != null) {
+			visit(p);
+			preOrder(p.left);
+			preOrder(p.right);
 		}
 	}
 	
@@ -103,13 +129,13 @@ public abstract class BinaryTree<E> implements Tree<E> {
 
 	/**
 	 * 中序遍历：左 -> 根 -> 右
-	 * @param root
+	 * @param p
 	 */
-	public void inOrder(Node<E> root) {
-		if (root != null) {
-			inOrder(root.left);
-			visit(root);
-			inOrder(root.right);
+	public void inOrder(Node<E> p) {
+		if (p != null) {
+			inOrder(p.left);
+			visit(p);
+			inOrder(p.right);
 		}
 	}
 	
@@ -120,13 +146,13 @@ public abstract class BinaryTree<E> implements Tree<E> {
 
 	/**
 	 * 后序遍历：左 -> 右 -> 根
-	 * @param root
+	 * @param p
 	 */
-	public void postOrder(Node<E> root) {
-		if (root != null) {
-			postOrder(root.left);
-			postOrder(root.right);
-			visit(root);
+	public void postOrder(Node<E> p) {
+		if (p != null) {
+			postOrder(p.left);
+			postOrder(p.right);
+			visit(p);
 		}
 	}
 	
@@ -137,13 +163,13 @@ public abstract class BinaryTree<E> implements Tree<E> {
 
 	/**
 	 * 层序遍历，基于队列
-	 * @param root
+	 * @param p
 	 */
-	public void levelOrder(Node<E> root) {
-		if (root == null) 
+	public void levelOrder(Node<E> p) {
+		if (p == null) 
 			return;
 		Queue<Node<E>> queue = new LinkedList<>(); // 层序遍历时保存结点的队列
-		queue.offer(root); // 初始化
+		queue.offer(p); // 初始化
 		while (!queue.isEmpty()) {
 			Node<E> node = queue.poll();
 			visit(node); // 访问节点
@@ -155,27 +181,31 @@ public abstract class BinaryTree<E> implements Tree<E> {
 	}
 
 	private void visit(Node<E> n) {
-		System.out.println(n.item + "");
+		System.out.printf("%3d", n.data);
 	}
 		
 	static class Node<E> {
-		E item;
+		E data;
 		Node<E> left;
 		Node<E> right;
 		
-		Node() {
-		}
+		Node() {}
 		
 		Node(E item) {
 			this(null, item, null);
 		}
 		
-		Node(Node<E> left, E item, Node<E> right) {
-			this.item = item;
+		Node(Node<E> left, E data, Node<E> right) {
+			this.data = data;
 			this.left = left;
 			this.right = right;
 		}
 
+		@Override
+		public String toString() {
+			return "Node [data=" + data + ", left=" + left + ", right=" + right + "]";
+		}
+		
 	}
 	
 }

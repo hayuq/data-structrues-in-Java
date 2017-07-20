@@ -23,11 +23,13 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Seria
 		this.comparator = comparator;
 	}
 	
-	public Node<E> create(Node<E> node, E[] arr, int n) {
-		for (int i = 0; i < n; i++) {
-			node = insert(node, arr[i]);
+	public BinarySearchTree<E> build(E[] arr, int n) {
+		root = new Node<>(arr[0]);
+		Node<E> p = root;
+		for (int i = 1; i < n; i++) {
+			p = insert(p, arr[i]);
 		}
-		return node;
+		return this;
 	}
 	
 	@Override
@@ -35,21 +37,21 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Seria
 		return insert(root, e) != null;
 	}
 
-	public Node<E> insert(Node<E> root, E e) {
-		if (root == null) {
-			root = new Node<>(e);
+	public Node<E> insert(Node<E> p, E e) {
+		if (p == null) {
+			p = new Node<>(e);
 			size++;
-			return root;
+			return p;
 		}
-		int result = compare(e, root.item);
+		int result = compare(e, p.data);
 		if (result < 0) {
-			root.left = insert(root.left, e);
+			p.left = insert(p.left, e);
 		}
 		if (result > 0) {
-			root.right = insert(root.right, e);
+			p.right = insert(p.right, e);
 		}
 		size++;
-		return root;
+		return p;
 	}
 
 	@Override
@@ -57,51 +59,52 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Seria
 		return search(root, o);
 	}
 	
-	public Node<E> search(Node<E> root, Object o) {
-		if (root == null)
+	public Node<E> search(Node<E> p, Object o) {
+		if (p == null)
 			return null;
-		int result = compare(o, root.item);
-		return result > 0 ? search(root.right, o) 
-				: (result == 0 ? root : search(root.left, o));
+		int result = compare(o, p.data);
+		return result > 0 ? search(p.right, o) 
+				: (result == 0 ? p : search(p.left, o));
 	}
 
 	@Override
 	public boolean remove(Object o) {
+		if (search(root, o) == null) {
+			return false;
+		}
 		return remove(root, o);
 	}
 	
-	public boolean remove(Node<E> root, Object o) {
-		if (root == null)
+	public boolean remove(Node<E> p, Object o) {
+		if (p == null)
 			return false;
-		int result = compare(o, root.item);
+		int result = compare(o, p.data);
 		//待删除元素与当前节点值相等
 		if (result == 0) { 
 			//TODO 删除操作
 			//判断当前节点是否有左右子树
-			if (root.left == null && root.right == null) {
+			if (p.left == null && p.right == null) {
 				//左右子树均为空(叶子节点)，直接将当前节点置为null
-				root = null;				
-			} else if (root.left != null) { //存在左子树
-				root = root.left;
-			} else if (root.right != null) { //存在右子树
-				root = root.right;
+				p = null;				
+			} else if (p.left != null) { //存在左子树
+				p = p.left;
+			} else if (p.right != null) { //存在右子树
+				p = p.right;
 			} else { //左右子树均不为空
 				
 			}
 			size--;
 			return true;
 		} else if (result < 0) {
-			return remove(root.left, o);
+			return remove(p.left, o);
 		} else {
-			return remove(root.right, o);
+			return remove(p.right, o);
 		}
 		
-		//递归删除节点
-//		Node<E> p = root;
-//        /** 
-//         * 1. 若p没有左子树，直接用p的右孩子取代它；
-//         * 2. 若p有左子树，找到其左子树的最右边的叶子结点r，用该叶子结点r来替代p，把r的左孩子作为r的父亲的右孩子；
-//         */
+        /** 
+         * 1. 若p没有左子树，直接用p的右孩子取代它；
+         * 2. 若p有左子树，找到其左子树的最右边的叶子结点r，用该叶子结点r来替代p，把r的左孩子作为r的父亲的右孩子；
+         */
 //        if(p.left == null) {
 //        	p = p.right;
 //        } else {
@@ -127,5 +130,5 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Seria
 		return comparator == null ? ((Comparable<? super E>)e1).compareTo((E)e2)
 	            : comparator.compare((E)e1, (E)e2);
 	}
-	
+
 }
