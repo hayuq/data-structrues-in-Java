@@ -1,6 +1,5 @@
 package com.june.tree;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -9,8 +8,6 @@ public abstract class BinaryTree<E> implements Tree<E> {
 	protected transient Node<E> root; //根节点
 	
 	protected transient int size; //树的节点数
-	
-	protected Comparator<? super E> comparator;
 	
 	/**
 	 * 返回树的深度
@@ -79,30 +76,6 @@ public abstract class BinaryTree<E> implements Tree<E> {
 			size--;
 		}
 		
-		/** 
-         * 1. 若p没有左子树，直接用p的右孩子取代它；
-         * 2. 若p有左子树，找到其左子树的最右边的叶子结点r，用该叶子结点r来替代p，把r的左孩子作为r的父亲的右孩子；
-         */
-//		if (p == null)
-//			return;
-//        if(p.left == null) {
-//        	p = p.right;
-//        } else {
-//            Node<E> r = p.left;
-//            Node<E> prev = p.right;
-//            while(r.right != null) {
-//            	prev = r;
-//            	r = r.right;
-//            }
-//            p.item = r.item;
-//            // 若r不是p的左子树,p的左子树不变，r的左子树作为r的父结点的右孩子结点
-//            if(prev != r) {
-//            	prev.right = r.left;
-//            } else {
-//            	// 若r是p的左子树，则p的左子树指向r的左子树
-//            	p.left = r.left;
-//            }
-//        }
 	}
 	
 	@Override
@@ -115,11 +88,11 @@ public abstract class BinaryTree<E> implements Tree<E> {
 	 * @param p
 	 */
 	public void preOrder(Node<E> p) {
-		if (p != null) {
-			visit(p);
-			preOrder(p.left);
-			preOrder(p.right);
-		}
+		if (p == null)
+			return;
+		visit(p);
+		preOrder(p.left);
+		preOrder(p.right);
 	}
 	
 	@Override
@@ -132,11 +105,11 @@ public abstract class BinaryTree<E> implements Tree<E> {
 	 * @param p
 	 */
 	public void inOrder(Node<E> p) {
-		if (p != null) {
-			inOrder(p.left);
-			visit(p);
-			inOrder(p.right);
-		}
+		if (p == null)
+			return;
+		inOrder(p.left);
+		visit(p);
+		inOrder(p.right);
 	}
 	
 	@Override
@@ -149,11 +122,11 @@ public abstract class BinaryTree<E> implements Tree<E> {
 	 * @param p
 	 */
 	public void postOrder(Node<E> p) {
-		if (p != null) {
-			postOrder(p.left);
-			postOrder(p.right);
-			visit(p);
-		}
+		if (p == null)
+			return;
+		postOrder(p.left);
+		postOrder(p.right);
+		visit(p);
 	}
 	
 	@Override

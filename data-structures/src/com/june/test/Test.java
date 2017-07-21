@@ -17,7 +17,7 @@ public class Test {
 		System.out.println("\n层序遍历：");
 		tree.levelOrder();
 		
-		tree.clear();
+//		tree.clear();
 		System.out.println("\n查找节点值为2的节点：" + tree.search(2));
 		System.out.println("树的深度：" + tree.depth());
 		System.out.println("树的节点数：" + tree.size());

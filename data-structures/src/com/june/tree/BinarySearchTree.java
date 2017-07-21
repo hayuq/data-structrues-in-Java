@@ -6,13 +6,18 @@ import java.util.Comparator;
 /**
  * 二叉查找树（Binary Search Tree），又称二叉排序树（Binary Sort Tree），亦称二叉搜索树
  * 特点：
- * <li>若左子树不空，则左子树上所有结点的值均小于或等于它的根结点的值；</li>
- * <li>若右子树不空，则右子树上所有结点的值均大于或等于它的根结点的值；</li>
+ * <li>若左子树不空，则左子树上所有结点的值均小于它的根结点的值；</li>
+ * <li>若右子树不空，则右子树上所有结点的值均大于它的根结点的值；</li>
  * <li>左、右子树也分别为二叉查找树；</li>
  */
 public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Serializable {
 	
 	private static final long serialVersionUID = 2545329670444241029L;
+	
+	/**
+	 * 用于保证树中节点的有序性
+	 */
+	protected Comparator<? super E> comparator;
 
 	public BinarySearchTree() {
 		root = null;
@@ -45,12 +50,13 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Seria
 		}
 		int result = compare(e, p.data);
 		if (result < 0) {
+			//插入的节点值比当前节点值小，则插入到左子树
 			p.left = insert(p.left, e);
 		}
 		if (result > 0) {
+			//插入的节点值比当前节点值大，则插入到右子树
 			p.right = insert(p.right, e);
 		}
-		size++;
 		return p;
 	}
 
@@ -69,9 +75,8 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Seria
 
 	@Override
 	public boolean remove(Object o) {
-		if (search(root, o) == null) {
+		if (search(root, o) == null)
 			return false;
-		}
 		return remove(root, o);
 	}
 	
@@ -123,6 +128,16 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements Tree<E>, Seria
 //            	p.left = r.left;
 //            }
 //        }
+	}
+	
+	static <E> Node<E> predecessor(Node<E> p) {
+		//TODO predecessor
+		return p.left;
+	}
+	
+	static <E> Node<E> successor(Node<E> p) {
+		//TODO successor
+		return p.right;
 	}
 	
 	@SuppressWarnings("unchecked")
