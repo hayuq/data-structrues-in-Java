@@ -15,23 +15,27 @@ public class AVLTree extends BinarySearchTree<E> {
 	@Override
 	public Node<E> insert(Node<E> p, E e) {
 		Node<E> n = super.insert(p, e);
-		adjust(n);
+		adjustBalance(n);
 		return n;
 	}
 	
 	@Override
 	public boolean remove(Object o) {
-		boolean success = super.remove(o);
-		if (success) {
-			adjust(root);
+		Node<E> t = search(o);
+		if (t != null) {
+			boolean ret = super.remove(o);
+			if (ret) {
+				adjustBalance(t);
+			}
+			return ret;
 		}
-		return success;
+		return false;
 	}
 
 	/**
 	 * 调整平衡
 	 */
-	private void adjust(Node<E> p) {
+	private void adjustBalance(Node<E> p) {
 		int leftDepth = depth(p.left);
 		int rightDepth = depth(p.right);
 		if (leftDepth - rightDepth > 1) {
