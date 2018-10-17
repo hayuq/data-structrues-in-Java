@@ -7,9 +7,7 @@ public interface Tree<E> {
 	int size();
 	
 	boolean isEmpty();
-	
-	void clear();
-	
+		
 	/**
 	 * 前序遍历
 	 */
